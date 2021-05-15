@@ -122,8 +122,6 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         dot = [0, 0]
 
         t = 0
-        # расстояние между рисуемыми пикселями пропорционально углу между ними
-        # (вершина угла находится в центре окружности)
         step = 1 / self.radius
 
         while (t < pi / 4 + step):
@@ -135,9 +133,6 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         return octant
 
     def midpoint_circle(self):
-        # вводим функцию, которая содержит разность квадрата расстояния от центра
-        # окружности до «средней точки» рассматриваемого на текущий момент пикселя
-        # и квадрата расстояния до идеальной окружности
         octant = []
         dot = [0, self.radius]
         d = 1 - self.radius
@@ -158,8 +153,6 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         return octant
 
     def brezenham_circle(self):
-        # окружность строится путем рассмотрения возможных ситуаций прохода прямой
-        # и, исходя из этого положения, рассмотрения расстояния до ближайших пикселей
         octant = []
         dot = [0, self.radius]
         d = 2 * (1 - self.radius)
@@ -179,6 +172,7 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
                     dot[1] -= 1
                     d += 2 * (dot[0] - dot[1] + 1)
             else:
+                # ИСПРАВИТЬ!!!! ЭТО ЛИШНЕЕ
                 d2 = 2 * (d - dot[0]) - 1
                 dot[1] -= 1
                 if (d2 <= 0):
@@ -194,7 +188,6 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         return octant
 
     def library_method_circle(self):
-        # self.set_current_color()
         self.scene.addEllipse(
             self.center[0] - self.radius, self.center[1] - self.radius, self.radius*2, self.radius*2, self.pen)
 
@@ -213,6 +206,7 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         dot = [self.center[0], self.center[1]]
         limit = self.center[0] + round((self.semiaxis_a ** 2 /
                                         sqrt(self.semiaxis_a**2 + self.semiaxis_b**2)))
+
         while (dot[0] <= limit):
             dot[1] = self.center[1] + round(sqrt(self.semiaxis_a**2 - (
                 dot[0] - self.center[0])**2) * self.semiaxis_b / self.semiaxis_a)
@@ -444,10 +438,6 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
             self.ui.QSB_step_semiaxis_a.value(), self.ui.QSB_step_semiaxis_b.value()]
         self.ellipses_amount = self.ui.QSB_ellipses_count.value()
 
-        if ((self.step_semiaxis[0] - self.start_semiaxis[0] == 0) and (self.step_semiaxis[1] - self.start_semiaxis[1] == 0)):
-            QMessageBox.critical(
-                self, "Предупреждение", "Количество эллипсов и разница между начальными и конечными значениями полуосей равны нулю. \nВы уверены в правильности введенных данных?")
-
     def get_concentric_circles_parameters(self):
         self.start_radius = self.ui.QSB_start_radius.value()
         self.end_radius = self.ui.QSB_end_radius.value()
@@ -464,7 +454,7 @@ class App(QtWidgets.QMainWindow, mainwindow.Ui_MainWindow):
         r = np.arange(1, 100, 5)
         semiaxis_a = np.arange(2, 100, 2)
         semiaxis_b = np.arange(1, 50, 1)
-        reps = 100
+        reps = 30
 
         canonical_times = []
         for i in range(len(r)):
