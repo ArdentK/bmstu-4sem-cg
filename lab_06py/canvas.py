@@ -58,8 +58,16 @@ class Canvas(QLabel):
             if event.buttons() == Qt.LeftButton:
                 exactly = QApplication.keyboardModifiers() & Qt.ControlModifier
                 self.add_dot(position, exactly=exactly)
+                self.table.add_dot(position)
             elif event.buttons() == Qt.RightButton:
                 self.close_poly()
+
+    def mouseMoveEvent(self, event):
+        if self.ui.QRB_figure.isChecked():
+            position = Dot(event.pos().x(), event.pos().y())
+            if event.buttons() == Qt.LeftButton:
+                exactly = QApplication.keyboardModifiers() & Qt.ControlModifier
+                self.add_dot(position, exactly=exactly)
 
     def get_curr_color(self):
         color_text = self.ui.QCB_color.currentText()
@@ -107,7 +115,7 @@ class Canvas(QLabel):
                 pos.y = last_vertex.y
 
         self.figure.add_vertex(pos)
-        self.table.add_dot(pos)
+        # self.table.add_dot(pos)
 
         qp = QPainter(self.image)
         qp.setPen(QPen(Qt.black, 4))
@@ -147,7 +155,7 @@ class Canvas(QLabel):
         self.image.setPixelColor(pixel.to_qpoint(), cmp)
 
     def fill(self, seed: Dot, color: QColor, delay=False):
-        stack: list[Dot] = []
+        stack = []
         stack.append(seed)
         self.border_fill()
         # return
