@@ -53,7 +53,7 @@ class App(QtWidgets.QMainWindow):
         if (color_text == "Белый(фон)"):
             color = Qt.white
         elif (color_text == "Черный"):
-            color = Qt.black
+            color = Qt.yellow
         elif (color_text == "Красный"):
             color = Qt.red
         elif (color_text == "Синий"):

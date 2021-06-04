@@ -155,7 +155,7 @@ class Canvas(QLabel):
 
     def borders_and_points(self):
         qp = QPainter(self.image)
-        qp.setPen(QPen(Qt.blue, 2))
+        qp.setPen(QPen(Qt.black, 2))
 
         for poly in self.figure.data:
             vert = poly.vertices

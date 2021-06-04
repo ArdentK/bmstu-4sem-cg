@@ -13,8 +13,11 @@ def dda(image: QImage, p_begin: Dot, p_end: Dot):
         return
 
     length = int(max(abs(p_end.x - p_begin.x), abs(p_end.y - p_begin.y)))
-    dx = (p_end.x - p_begin.x) / length
-    dy = (p_end.y - p_begin.y) / length
+    if (length != 0):
+        dx = (p_end.x - p_begin.x) / length
+        dy = (p_end.y - p_begin.y) / length
+    else:
+        return
 
     curr_x, curr_y = p_begin.x, p_begin.y
     tmp_x, tmp_y = curr_x, curr_y
