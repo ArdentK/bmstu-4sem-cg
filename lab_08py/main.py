@@ -1,5 +1,3 @@
-from timeit import timeit
-
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtWidgets import QTableWidgetItem, QApplication, QLabel
 from PyQt5.QtGui import QPen, QColor, QImage, QPixmap, QPainter

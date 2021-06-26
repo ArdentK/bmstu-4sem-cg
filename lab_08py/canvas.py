@@ -1,22 +1,8 @@
-from timeit import timeit
-
 from structures import Dot
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, QEventLoop
 from PyQt5.QtGui import QColor, QImage, QPainter, QPen, QPixmap
 from PyQt5.QtWidgets import QApplication, QLabel, QMessageBox
-
-eps = 5
-
-MASK_LEFT = 0b0001
-MASK_RIGHT = 0b0010
-MASK_DOWN = 0b0100
-MASK_UP = 0b1000
-
-LEFT = 0
-DOWN = 1
-RIGHT = 2
-UP = 3
 
 
 class Canvas(QLabel):
@@ -135,7 +121,6 @@ class Canvas(QLabel):
         self.image_set()
 
     # Отрисовка части отрезка
-
     def draw_part_segment(self, result_points, colour_result):
         qp = QPainter(self.image)
         qp.setPen(QPen(colour_result, 2))
@@ -203,9 +188,11 @@ class Canvas(QLabel):
 
         if flag == True:
             vector_1 = self.get_vector_coordinates(
-                self.cutter[i - 1], self.cutter[i])
+                self.cutter[-2], self.cutter[-1])
             vector_2 = self.get_vector_coordinates(
-                self.cutter[i], self.cutter[0])
+                self.cutter[-1], self.cutter[0])
+            curr_sign_mul_vectors = self.compulate_sign_mul_vectors(
+                vector_1, vector_2)
             if curr_sign_mul_vectors * sign_mul_vectors <= 0:
                 flag = False
 
@@ -273,6 +260,13 @@ class Canvas(QLabel):
             if D_scalar == 0 and W_scalar <= 0:
                 return
 
+            if D_scalar == 0:
+                param_point_1 = self.convert_to_parametric(
+                    section[0], section[1], t_down)
+                self.draw_part_segment(
+                    [param_point_1, param_point_1], Qt.black)
+                return
+
             t = -W_scalar / D_scalar
 
             if D_scalar > 0:
@@ -290,10 +284,10 @@ class Canvas(QLabel):
 
         if t_down <= t_up:
             param_point_1 = self.convert_to_parametric(
-                    section[0], section[1], t_down)
+                section[0], section[1], t_down)
             param_point_2 = self.convert_to_parametric(
-                    section[0], section[1], t_up)
+                section[0], section[1], t_up)
             self.draw_part_segment(
-                    [param_point_1, param_point_2], Qt.black)
+                [param_point_1, param_point_2], Qt.black)
 
         return
